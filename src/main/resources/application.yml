@@ -1,5 +1,7 @@
 server:
   port: 8887
 mqtt:
-  serverURI: mqtt://127.0.0.1:1883
+  url: tcp://86.107.198.245:1883
   connectionTimeoutInSeconds: 3
+  username: suterminal
+  password: "@#)(DJ03h=e0f9a"

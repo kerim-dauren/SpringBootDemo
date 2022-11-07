@@ -5,13 +5,13 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 @Data
-public class TerminalPayRequestDto {
-    public String terminalId;
+public class DevicePayRequestDto {
+    public String deviceId;
     public BigDecimal sum;
     public BigDecimal quantity;
 
-    public TerminalPayRequestDto(String terminalId, BigDecimal sum, BigDecimal quantity) {
-        this.terminalId = terminalId;
+    public DevicePayRequestDto(String deviceId, BigDecimal sum, BigDecimal quantity) {
+        this.deviceId = deviceId;
         this.sum = sum;
         this.quantity = quantity;
     }
