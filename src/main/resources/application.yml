@@ -1,0 +1,5 @@
+server:
+  port: 8887
+mqtt:
+  serverURI: mqtt://127.0.0.1:1883
+  connectionTimeoutInSeconds: 3
