@@ -1,13 +1,13 @@
-package kz.suterminal.configs;
+package kz.suterminal.config;
 
+import kz.suterminal.manager.DeviceMessageManager;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,17 +28,29 @@ public class MqttConfig {
     private String url;
     private String username;
     private String password;
-    private int connectionTimeoutInSeconds;
+    private boolean automaticReconnect;
+    private boolean cleanSession;
+    private int connectionTimeout;
+
+    @Autowired
+    private DeviceMessageManager deviceMessageManager;
 
 
     public MqttConnectOptions mqttConnectOptions() {
         var options = new MqttConnectOptions();
-        options.setAutomaticReconnect(true);
-        options.setCleanSession(true);
-        options.setConnectionTimeout(connectionTimeoutInSeconds);
+        options.setAutomaticReconnect(automaticReconnect);
+        options.setCleanSession(cleanSession);
+        options.setConnectionTimeout(connectionTimeout);
         options.setUserName(username);
         options.setPassword(password.toCharArray());
         return options;
+    }
+
+    @Bean
+    public DefaultMqttPahoClientFactory pahoClientFactory() {
+        DefaultMqttPahoClientFactory pahoClientFactory = new DefaultMqttPahoClientFactory();
+        pahoClientFactory.setConnectionOptions(mqttConnectOptions());
+        return pahoClientFactory;
     }
 
     @SneakyThrows
@@ -59,10 +71,7 @@ public class MqttConfig {
 
     @Bean
     public MessageProducer inbound() {
-        var factory = new DefaultMqttPahoClientFactory();
-        factory.setConnectionOptions(mqttConnectOptions());
-
-        var adapter = new MqttPahoMessageDrivenChannelAdapter(url, MqttClient.generateClientId(), factory, "device/#");
+        var adapter = new MqttPahoMessageDrivenChannelAdapter(url, MqttClient.generateClientId(), pahoClientFactory(), "device/#");
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -73,12 +82,13 @@ public class MqttConfig {
     @Bean
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public MessageHandler handler() {
+
         return new MessageHandler() {
 
             @SneakyThrows
             @Override
             public void handleMessage(Message<?> message) {
-                System.out.println(message.getPayload());
+                deviceMessageManager.handleMessage(message);
             }
 
         };

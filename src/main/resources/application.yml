@@ -1,7 +1,34 @@
+# Server configuration
 server:
   port: 8887
+  servlet:
+    context-path: /
 mqtt:
+  automaticReconnect: true
+  cleanSession: true
+  connectionTimeout: 10
   url: tcp://86.107.198.245:1883
-  connectionTimeoutInSeconds: 3
   username: suterminal
   password: "@#)(DJ03h=e0f9a"
+# Spring Boot configuration
+spring:
+  profiles:
+    active: development
+  main:
+    allow-bean-definition-overriding: true
+  # Database
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    # For correct works with docker-compose, we need to change "localhost" to a service name, take from docker-compose.yml
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: admin
+    password: admin
+  # JPA properties
+  jpa:
+    hibernate:
+      ddl-auto: create # When you launch the application for the first time - switch "update" at "create"
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    generate-ddl: true

@@ -1,4 +1,4 @@
-package kz.suterminal.models.entities;
+package kz.suterminal.model.response;
 
 public class TerminalTariff {
     public String name;

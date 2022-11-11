@@ -1,12 +1,11 @@
-package kz.suterminal.models;
+package kz.suterminal.model.response;
 
-import kz.suterminal.models.entities.TerminalTariff;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class CheckTerminalResponse {
+public class DeviceCheckResponse {
     public String address;
     public String bin;
     public String phoneNumber;
