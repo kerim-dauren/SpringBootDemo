@@ -1,5 +1,6 @@
 package kz.suterminal.entity;
 
+import kz.suterminal.model.DeviceStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,14 +18,14 @@ public class Device {
     @Column(unique = true)
     private String imei;
     private String address;
-    private String status;
+    private DeviceStatus status;
     @ManyToOne
-    @JoinColumn(name="partner_id", nullable=false)
-    private PartnerEntity partner;
+    @JoinColumn(name = "partner_id", nullable = false)
+    private Partner partner;
     @ManyToMany
     @JoinTable(
             name = "device_tariffs",
             joinColumns = @JoinColumn(name = "device_id"),
             inverseJoinColumns = @JoinColumn(name = "tariff_id"))
-    private Set<TariffEntity> tariffs;
+    private Set<Tariff> tariffs;
 }

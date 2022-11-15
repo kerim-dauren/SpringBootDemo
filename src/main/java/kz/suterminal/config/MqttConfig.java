@@ -1,6 +1,6 @@
 package kz.suterminal.config;
 
-import kz.suterminal.manager.DeviceMessageManager;
+import kz.suterminal.services.MqttMessageHandler;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
@@ -33,7 +33,7 @@ public class MqttConfig {
     private int connectionTimeout;
 
     @Autowired
-    private DeviceMessageManager deviceMessageManager;
+    private MqttMessageHandler mqttMessageHandler;
 
 
     public MqttConnectOptions mqttConnectOptions() {
@@ -88,7 +88,7 @@ public class MqttConfig {
             @SneakyThrows
             @Override
             public void handleMessage(Message<?> message) {
-                deviceMessageManager.handleMessage(message);
+                mqttMessageHandler.handleMessage(message);
             }
 
         };

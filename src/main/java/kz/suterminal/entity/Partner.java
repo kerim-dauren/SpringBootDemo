@@ -1,11 +1,14 @@
 package kz.suterminal.entity;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "partners")
-public class PartnerEntity {
+@Getter
+public class Partner {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

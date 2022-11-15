@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tariffs")
-public class TariffEntity {
+public class Tariff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

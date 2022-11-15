@@ -1,7 +1,7 @@
 package kz.suterminal.repository;
 
-import kz.suterminal.entity.PartnerEntity;
+import kz.suterminal.entity.Partner;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-interface PartnerRepository extends JpaRepository<PartnerEntity, Long> {
+interface PartnerRepository extends JpaRepository<Partner, Long> {
 }

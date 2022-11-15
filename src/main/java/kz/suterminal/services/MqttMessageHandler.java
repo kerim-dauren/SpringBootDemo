@@ -1,7 +1,7 @@
-package kz.suterminal.manager;
+package kz.suterminal.services;
 
 import org.springframework.messaging.Message;
 
-public interface DeviceMessageManager {
+public interface MqttMessageHandler {
     void handleMessage(Message<?> message);
 }

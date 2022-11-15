@@ -1,10 +1,10 @@
 package kz.suterminal.controller;
 
-import kz.suterminal.manager.ExtDeviceManager;
 import kz.suterminal.model.requests.DeviceCheckRequest;
 import kz.suterminal.model.requests.DevicePayRequest;
 import kz.suterminal.model.response.DeviceCheckResponse;
 import kz.suterminal.model.response.DevicePayResponse;
+import kz.suterminal.services.ExternalDeviceRequestService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +18,12 @@ import java.math.BigDecimal;
 @Slf4j
 public class ExtDeviceController {
 
-    private ExtDeviceManager extDeviceManager;
+    private ExternalDeviceRequestService externalDeviceRequestService;
 
     @GetMapping("{deviceId}/check")
     public ResponseEntity<DeviceCheckResponse> check(@PathVariable String deviceId) {
-        try {
-            var result = extDeviceManager.check(new DeviceCheckRequest(deviceId));
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            log.error("unexpected", e);
-            return ResponseEntity.status(500).build();
-        }
+        var result = externalDeviceRequestService.check(new DeviceCheckRequest(deviceId));
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("{deviceId}/pay")
@@ -38,13 +33,8 @@ public class ExtDeviceController {
             @RequestParam("sum") BigDecimal sum,
             @RequestParam("qty") BigDecimal quantity
     ) {
-        try {
-            var request = new DevicePayRequest(deviceId, transactionId, sum, quantity);
-            var result = extDeviceManager.pay(request);
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            log.error("unexpected", e);
-            return ResponseEntity.status(500).build();
-        }
+        var request = new DevicePayRequest(deviceId, transactionId, sum, quantity);
+        var result = externalDeviceRequestService.pay(request);
+        return ResponseEntity.ok(result);
     }
 }
